@@ -5,7 +5,7 @@ Game.init = function(){
 };
 
 Game.preload = function() {
-    game.load.image('sprite', 'assets/coin.png');
+    game.load.image('sprite', 'assets/spaceship_1.png');
 };
 
 Game.create = function(){
