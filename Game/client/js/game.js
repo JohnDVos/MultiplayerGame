@@ -13,6 +13,12 @@ Game.create = function(){
     var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     testKey.onDown.add(Client.sendTest, this);
     
+    var leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    leftKey.onDown.add(Client.moveLeft, this);
+    
+    var rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    rightKey.onDown.add(Client.moveRight, this);
+    
     game.input.onTap.add(Game.getCoordinates, this);
     
     Client.askNewPlayer();

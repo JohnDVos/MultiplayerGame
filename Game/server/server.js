@@ -13,13 +13,28 @@ io.on('connection', function(client) {
         client.player = {
             id: server.lastPlayerID++,
             x: randomInt(100,400),
-            y: randomInt(100,400)
+            y: randomInt(100,400),
+            maxSpeed: 10
         };
         client.emit('allplayers',getAllPlayers());
         client.broadcast.emit('newplayer',client.player);
 
+        client.on('leftKeyPress', function(data){
+            console.log('press received');
+            client.player.x -= client.player.maxSpeed;
+            
+            io.emit('move',client.player);
+        });
+        
+        client.on('rightKeyPress', function(data){
+            console.log('press received');
+            client.player.x += client.player.maxSpeed;
+            
+            io.emit('move',client.player);
+        });
+        
         client.on('click',function(data) {
-            console.log('click to '+data.x+', '+data.y);
+            console.log(client.player.id+ ' clicked to '+data.x+', '+data.y);
             client.player.x = data.x;
             client.player.y = data.y;
             io.emit('move',client.player);
@@ -37,7 +52,7 @@ server.listen(PORT, function(){
     console.log('Listening on ' + server.address().port);
 });
 
-server.lastPlayerID = 0;
+server.lastPlayerID = 1;
 
 function getAllPlayers(){
     var players = [];

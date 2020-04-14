@@ -6,7 +6,15 @@ Client.sendTest = function(){
     Client.socket.emit('test');
 };
 
-Client.askNewPlayer = function(){
+Client.moveLeft = function(){
+    Client.socket.emit('leftKeyPress');
+};
+
+Client.moveRight = function(){
+    Client.socket.emit('rightKeyPress');
+};
+
+Client.askNewPlayer =  function(){
     Client.socket.emit('newplayer');
 };
 
