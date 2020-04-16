@@ -6,12 +6,19 @@ Client.sendTest = function(){
     Client.socket.emit('test');
 };
 
+
+//move player
 Client.moveLeft = function(){
     Client.socket.emit('leftKeyPress');
 };
-
 Client.moveRight = function(){
     Client.socket.emit('rightKeyPress');
+};
+Client.moveUp = function() {
+	Client.socket.emit('upKeyPress');
+};
+Client.moveDown = function() {
+	Client.socket.emit('downKeyPress');
 };
 
 Client.askNewPlayer =  function(){
