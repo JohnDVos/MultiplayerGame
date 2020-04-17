@@ -54,7 +54,7 @@ io.on('connection', function(client) {
 			if (data.down) { player.y += 10; }
 			if (data.left) { player.x -= 10; }
 			if (data.right) { player.x += 10; }
-		});
+		});*/
 		
         client.on('disconnect',function() {
             io.emit('remove', client.player.id);
