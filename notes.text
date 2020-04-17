@@ -7,3 +7,11 @@ might have some good code for enemie and explaining how to spawn more players.
 https://www.youtube.com/watch?v=_GioD4LpjMw
 
 https://phasertutorials.com/creating-a-simple-multiplayer-game-in-phaser-3-with-an-authoritative-server-part-2/
+https://www.dynetisgames.com/2017/03/06/how-to-make-a-multiplayer-online-game-with-phaser-socket-io-and-node-js/
+
+Game concepts:
+- space invaders style game
+- high score system
+- lives system
+- difficulty system
+- random player space ship on load or select one

@@ -19,27 +19,43 @@ io.on('connection', function(client) {
         client.emit('allplayers',getAllPlayers());
         client.broadcast.emit('newplayer',client.player);
 
-        client.on('leftKeyPress', function(data){
-            console.log('press received');
+        client.on('leftKeyPress', function(data) {
+            console.log('left key press received');
             client.player.x -= client.player.maxSpeed;
             
             io.emit('move',client.player);
         });
         
-        client.on('rightKeyPress', function(data){
-            console.log('press received');
+        client.on('rightKeyPress', function(data) {
+            console.log('right key press received');
             client.player.x += client.player.maxSpeed;
             
             io.emit('move',client.player);
         });
         
-        client.on('click',function(data) {
-            console.log(client.player.id+ ' clicked to '+data.x+', '+data.y);
-            client.player.x = data.x;
-            client.player.y = data.y;
-            io.emit('move',client.player);
-        });
-
+        client.on('upKeyPress', function(data) {
+			console.log('up key press received');
+			client.player.y -= client.player.maxSpeed;
+			
+			io.emit('move', client.player);
+		});
+		
+		client.on('downKeyPress', function(data) {
+			console.log('down key press received');
+			client.player.y += client.player.maxSpeed;
+			
+			io.emit('move', client.player);
+		});
+		
+		/*
+		socket.on('movement', function(data) {
+			var player = player[socket.id] || {};
+			if (data.up) { player.y -= 10; }
+			if (data.down) { player.y += 10; }
+			if (data.left) { player.x -= 10; }
+			if (data.right) { player.x += 10; }
+		});
+		
         client.on('disconnect',function() {
             io.emit('remove', client.player.id);
             console.log('disconnecting: ' + client.player.id);
