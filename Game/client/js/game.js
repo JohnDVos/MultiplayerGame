@@ -21,13 +21,10 @@ Game.create = function() {
 	//player controls.
     var leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);					//init left key
     	leftKey.onDown.add(Client.moveLeft, this);
-    
     var rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);				//init right key
     	rightKey.onDown.add(Client.moveRight, this);
-	
 	var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);						//init up key
 		upKey.onDown.add(Client.moveUp, this);
-	
 	var downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);				//init down key
 		downKey.onDown.add(Client.moveDown, this);
     
@@ -44,6 +41,7 @@ Game.addNewPlayer = function(id){
     Game.playerMap[id] = game.add.sprite(650,650,'player');
 };
 
+//controls player movement.
 Game.movePlayer = function(id, x, y) {
     var player = Game.playerMap[id];
     var distance = Phaser.Math.distance(player.x, player.y, x, y);
@@ -53,6 +51,7 @@ Game.movePlayer = function(id, x, y) {
     tween.start();
 };
 
+//removes player on disconnect.
 Game.removePlayer = function(id){
     Game.playerMap[id].destroy();
     delete Game.playerMap[id];
