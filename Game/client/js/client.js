@@ -20,7 +20,7 @@ Client.askNewPlayer =  function() {
 
 //data object fed to newplayer callback corresponds to socket.player data sent by server.
 Client.socket.on('newplayer',function(data) {
-    Game.addNewPlayer(data.id,data.x,data.y);
+    Game.addNewPlayer(data.id, data.x, data.y);
 });
 
 Client.socket.on('allplayers',function(data) {
@@ -30,7 +30,7 @@ Client.socket.on('allplayers',function(data) {
     }
 
     Client.socket.on('move',function(data){
-        Game.movePlayer(data.id,data.x,data.y);
+        Game.movePlayer(data.id, data.x, data.y);
     });
 
     Client.socket.on('remove',function(id){

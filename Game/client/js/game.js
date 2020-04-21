@@ -12,7 +12,7 @@ Game.preload = function() {
 };
 
 //notify server that a new player should be created.
-Game.create = function(){
+Game.create = function() {
 	Game.playerMap = {};															//empty object to keep track of player.
 	
     var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -30,63 +30,23 @@ Game.create = function(){
 	
 	var downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);				//init down key
 		downKey.onDown.add(Client.moveDown, this);
-	
-	/*
-	var movement = {
-		up:		false,
-		down:	false,
-		left:	false,
-		right:	false
-	}
-	Game.addEventListener('keydown', function(event) {
-		switch(event.keyCode) {
-			case 87:											//w key
-				movement.up = true;
-				break;
-			case 83:											//s key		
-				movement.down = true;
-				break;
-			case 65:											//a key
-				movement.left = true;
-				break;
-			case 68:											//d key
-				movement.right = true;
-				break;
-		}
-	});
-	Game.addEventListener('keyup', function(event) {
-		switch(event.keyCode) {
-			case 87:											//w key
-				movement.up = false;
-				break;
-			case 83:											//s key	
-				movement.down = false;
-				break;
-			case 65:											//a key
-				movement.left = false;
-				break;
-			case 68:											//d key
-				movement.right = false;
-				break;
-		}
-	});*/
     
     Client.askNewPlayer();
 };
 
-//loasd in players sprite & controls player movements based on "Game.PLayerMap" in create.
+//loads in players sprite & controls player movements based on "Game.PLayerMap" in create.
 Game.getCoordinates = function(pointer){
     Client.sendClick(pointer.worldX,pointer.worldY);
 };
 
-//loads in players sprite.
-Game.addNewPlayer = function(id,x,y){
-    Game.playerMap[id] = game.add.sprite(x,y,'player');
+//loads in players sprite with x / y co-ordinates.
+Game.addNewPlayer = function(id){
+    Game.playerMap[id] = game.add.sprite(650,650,'player');
 };
 
-Game.movePlayer = function(id,x,y){
+Game.movePlayer = function(id, x, y) {
     var player = Game.playerMap[id];
-    var distance = Phaser.Math.distance(player.x,player.y,x,y);
+    var distance = Phaser.Math.distance(player.x, player.y, x, y);
     var tween = game.add.tween(player);
     var duration = distance*10;
     tween.to({x:x,y:y}, duration);
