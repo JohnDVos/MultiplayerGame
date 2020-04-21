@@ -1,44 +1,48 @@
 var Client = {};
-Client.socket = io('http://localhost:55000');					//connects to local host port 55000.
+Client.socket = io('http://localhost:55000');
 
-//console test for if functionning.
 Client.sendTest = function() {
     console.log("test sent");
     Client.socket.emit('test');
 };
 
-//move player
-Client.moveLeft = function(){ Client.socket.emit('leftKeyPress'); };
-Client.moveRight = function(){ Client.socket.emit('rightKeyPress'); };
-Client.moveUp = function() { Client.socket.emit('upKeyPress'); };
-Client.moveDown = function() { Client.socket.emit('downKeyPress'); };
+/*
+Client.fireProjectile = function() { Client.socket.emit('spaceKeyPress'); }
+*/
 
-//uses socket object & sends message to server, labelled new player.
-Client.askNewPlayer =  function() {
+//move player
+Client.moveLeft 	= 	function()	{ 	Client.socket.emit('leftKeyPress'); 	};
+Client.moveRight 	= 	function()	{ 	Client.socket.emit('rightKeyPress'); 	};
+Client.moveUp 		= 	function() 	{ 	Client.socket.emit('upKeyPress'); 		};
+Client.moveDown 	= 	function() 	{ 	Client.socket.emit('downKeyPress'); 	};
+
+
+Client.askNewPlayer =  function() {														//uses socket object & sends message to server, labelled new player.
     Client.socket.emit('newplayer');
 };
-
-//data object fed to newplayer callback corresponds to socket.player data sent by server.
-Client.socket.on('newplayer',function(data) {
+Client.socket.on('newplayer',function(data) {											//data object fed to newplayer callback corresponds to socket.player data sent by server.
     Game.addNewPlayer(data.id, data.x, data.y);
 });
 
 Client.socket.on('allplayers',function(data) {
 	
-	//id date, x & y co-ordinate data.
-    for(var i = 0; i < data.length; i++){								
+    for(var i = 0; i < data.length; i++){												//id date, x & y co-ordinate data.
         Game.addNewPlayer(data[i].id,data[i].x,data[i].y);
     }
 
-	//calls move function, passing player id, x & y co-ordinate.
     Client.socket.on('move',function(data){
         Game.movePlayer(data.id, data.x, data.y);
     });
-	
-	//calls remove player function, passing player ID to remove correct player.
+
     Client.socket.on('remove',function(id){
         Game.removePlayer(id);
     });
 });
 
-
+/* ATTEMPT AT MAKING THE BACKGROUND WORK.
+Client.askBackground = function() {
+	Client.socket.emit('background');
+};
+Client.socket.on('background', function() {
+	Game.background();
+});*/

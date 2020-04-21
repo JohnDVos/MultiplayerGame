@@ -8,7 +8,12 @@ io.on('connection', function(client) {
     client.on('test', function() {
         console.log('test received');
     });
-    
+	
+	/* ATTEMPT AT BACKGROUND
+	client.on('background', function() {
+		client.broadcast.emit('background', client.background);
+	});*/
+	
 	/****************************************
 	*										*
 	*			create new player			*
@@ -20,8 +25,8 @@ io.on('connection', function(client) {
 		//max movement speed to 20.
         client.player = {
             id: server.lastPlayerID++,
-            x: 650,
-            y: 650,
+            x: 600,
+            y: 600,
             maxSpeed: 20
         };
         client.emit('allplayers',getAllPlayers());
