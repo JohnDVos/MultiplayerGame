@@ -26,23 +26,15 @@ Client.socket.on('newplayer',function(data) {											//data object fed to new
 
 Client.socket.on('allplayers',function(data) {
 	
-    for(var i = 0; i < data.length; i++){												//id date, x & y co-ordinate data.
+    for(var i = 0; i < data.length; i++){												//id data, x & y co-ordinate data.
         Game.addNewPlayer(data[i].id,data[i].x,data[i].y);
     }
 
-    Client.socket.on('move',function(data){
+    Client.socket.on('move',function(data){												//calls move function.
         Game.movePlayer(data.id, data.x, data.y);
     });
 
-    Client.socket.on('remove',function(id){
+    Client.socket.on('remove',function(id){												//calls removes player function.
         Game.removePlayer(id);
     });
 });
-
-/* ATTEMPT AT MAKING THE BACKGROUND WORK.
-Client.askBackground = function() {
-	Client.socket.emit('background');
-};
-Client.socket.on('background', function() {
-	Game.background();
-});*/

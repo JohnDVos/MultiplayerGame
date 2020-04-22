@@ -9,25 +9,17 @@ io.on('connection', function(client) {
         console.log('test received');
     });
 	
-	/* ATTEMPT AT BACKGROUND
-	client.on('background', function() {
-		client.broadcast.emit('background', client.background);
-	});*/
-	
 	/****************************************
 	*										*
 	*			create new player			*
 	*										*
 	****************************************/
     client.on('newplayer',function() {
-		//set player ID 1 higher than previous player ID.
-		//set player x & y co-ordinates.
-		//max movement speed to 20.
         client.player = {
-            id: server.lastPlayerID++,
-            x: 600,
-            y: 600,
-            maxSpeed: 20
+            id: server.lastPlayerID++,								//set player ID 1 higher than previous player ID.
+            x: 600,													//set player x co-ordinates.
+            y: 600,													//set player y co-ordinates.
+            maxSpeed: 20											//max movement speed to 20.
         };
         client.emit('allplayers',getAllPlayers());
         client.broadcast.emit('newplayer', client.player);
@@ -59,8 +51,7 @@ io.on('connection', function(client) {
 			io.emit('move', client.player);
 		});
 		
-		//player disconnects, remove player ID.
-        client.on('disconnect',function() {
+        client.on('disconnect',function() {							//player disconnects, remove player ID.
             io.emit('remove', client.player.id);
             console.log('disconnecting: ' + client.player.id);
         });
