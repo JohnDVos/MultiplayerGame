@@ -1,0 +1,4 @@
+- Run XAMPP as per usual
+- cd to C:\xampp\htdocs\MultiplayerGame\SpaceInvader in shell
+- type "node server.js " in shell
+- go to localhost:8081
