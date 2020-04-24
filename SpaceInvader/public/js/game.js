@@ -24,7 +24,7 @@ function preload() {
 	
 	//players:
     this.load.image('ship', 'assets/player/spaceship_1.png');
-    this.load.image('ship2', 'assets/spaceship_2.png');
+    this.load.image('ship2', 'assets//player/spaceship_2.png');
 	
 	//power-ups:
 	this.load.image('heartPowerUp', 'assets/power-ups/heartPowerUp.png');											//loads health power-up asset.

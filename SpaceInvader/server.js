@@ -24,9 +24,7 @@ io.on('connection', function (socket) {
     // send the players object to the new player
     socket.emit('currentPlayers', players);
     // update all other players of the new player
-    socket.broadcast.emit('newPlayer', players[socket.id]);
-	socket.emit('heartPowerUpLocation', { x: self.heartPowerUp.x, y: self.heartPowerUp.y });					//send power up to new player.
-	socket.emit('updateScore', self.scores);																	//semd current scores.
+    socket.broadcast.emit('newPlayer', players[socket.id]);  
     
     socket.on('disconnect', function () {
         console.log('user disconnected');
