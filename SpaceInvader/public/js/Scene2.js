@@ -4,29 +4,17 @@ class Scene2 extends Phaser.Scene{
     }
     
     preload() {
-    this.load.image('space', 'assets/space_background.png');														//load background image.
+        this.load.image('space', 'assets/space_background.png');														//load background image.
 	
-	//players:
-    this.load.image('ship', 'assets/player/spaceship_1.png');
-    this.load.image('ship2', 'assets//player/spaceship_2.png');
+	   //players:
+        this.load.image('ship', 'assets/player/spaceship_1.png');
+        this.load.image('ship2', 'assets//player/spaceship_2.png');
 	
-	//power-ups:
-	this.load.image('heartPowerUp', 'assets/power-ups/heartPowerUp.png');											//loads health power-up asset.
-	this.load.image('damagePowerUp', 'assets/power-ups/damagePowerUp.png');											//loads damange power-up asset.
+	   //power-ups:
+	   this.load.image('heartPowerUp', 'assets/power-ups/heartPowerUp.png');											//loads health power-up asset.
+	   this.load.image('damagePowerUp', 'assets/power-ups/damagePowerUp.png');											//loads damange power-up asset.
 	
-	//menu assets:
-	this.load.image('menu', 'assets/menu/menu.png');
-	this.load.image('next', 'assets/menu/next.png');
-	this.load.image('back', 'assets/menu/back.png');
-	this.load.image('help', 'assets/menu/help.png');
-	this.load.image('settings', 'assets/menu/settings.png');
-	this.load.image('playGame', 'assets/menu/playGame.png');
-	
-	//dificulty assets:
-	this.load.image('easy', 'assets/menu/easy.png');
-	this.load.image('medium', 'assets/menu/medium.png');
-	this.load.image('hard', 'assets/menu/hard.png');
-}
+    }
  
     create() {
     var self = this;
