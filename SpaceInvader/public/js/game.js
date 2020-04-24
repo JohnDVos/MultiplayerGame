@@ -20,14 +20,33 @@ var config = {
 var game = new Phaser.Game(config);
  
 function preload() {
-    this.load.image('space', 'assets/space_background.png');
-    this.load.image('ship', 'assets/Spaceship_1.png');
-    this.load.image('ship2', 'assets/Spaceship_3.png');
+    this.load.image('space', 'assets/space_background.png');														//load background image.
+	
+	//players:
+    this.load.image('ship', 'assets/player/spaceship_1.png');
+    this.load.image('ship2', 'assets/spaceship_2.png');
+	
+	//power-ups:
+	this.load.image('heartPowerUp', 'assets/power-ups/heartPowerUp.png');											//loads health power-up asset.
+	this.load.image('damagePowerUp', 'assets/power-ups/damagePowerUp.png');											//loads damange power-up asset.
+	
+	//menu assets:
+	this.load.image('menu', 'assets/menu/menu.png');
+	this.load.image('next', 'assets/menu/next.png');
+	this.load.image('back', 'assets/menu/back.png');
+	this.load.image('help', 'assets/menu/help.png');
+	this.load.image('settings', 'assets/menu/settings.png');
+	this.load.image('playGame', 'assets/menu/playGame.png');
+	
+	//dificulty assets:
+	this.load.image('easy', 'assets/menu/easy.png');
+	this.load.image('medium', 'assets/menu/medium.png');
+	this.load.image('hard', 'assets/menu/hard.png');
 }
  
 function create() {
     var self = this;
-    this.add.image(750,375, 'space');
+    this.add.image(750, 375, 'space');
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
@@ -60,6 +79,26 @@ function create() {
             }
         });
     });
+	
+	this.scores = {																									// scores variable used to store and keep track of scores.
+		blue: 0,																									//blue team score.
+		red: 0																										//red team score.
+	};
+	
+	this.heartPowerUp = this.physics.add.image(randomPosition(700), randomPosition(500), 'heartPowerUp');			//new game object with random x&y position.
+	this.physics.add.collider(this.players);																		//adds a collider fo rthe player.
+	
+	this.physics.add.overlap(this.players, this.heartPowerUp, function(heartPowerUp, player) {						//adds an overlap between players and heart power-up game object.
+		if(players[player.playerId].team === 'red') {																//adds 10 points if the player belongs to the red team.
+			self.scores.red += 10;	
+		} else {																									//adds 10 points if the player belongs to the blue team.
+			self.scores.blue += 10;
+		}
+		
+		self.heartPowerUp.setPosition(randomPosition(700), randomPosition(500));
+		io.emit('UpdateScore', self.scores);																		//io message to update score.
+		io.emit('powerUpLocation', { x: self.heartPowerUp.x, y: self.heartPowerUp.y });								//io message to update power-ups location.
+	});
 }
  
 function update() {
