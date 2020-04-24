@@ -46,7 +46,7 @@ function preload() {
  
 function create() {
     var self = this;
-    this.add.image(750, 375, 'space');
+    this.add.image(750,375, 'space');
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
@@ -79,26 +79,6 @@ function create() {
             }
         });
     });
-	
-	this.scores = {																									// scores variable used to store and keep track of scores.
-		blue: 0,																									//blue team score.
-		red: 0																										//red team score.
-	};
-	
-	this.heartPowerUp = this.physics.add.image(randomPosition(700), randomPosition(500), 'heartPowerUp');			//new game object with random x&y position.
-	this.physics.add.collider(this.players);																		//adds a collider fo rthe player.
-	
-	this.physics.add.overlap(this.players, this.heartPowerUp, function(heartPowerUp, player) {						//adds an overlap between players and heart power-up game object.
-		if(players[player.playerId].team === 'red') {																//adds 10 points if the player belongs to the red team.
-			self.scores.red += 10;	
-		} else {																									//adds 10 points if the player belongs to the blue team.
-			self.scores.blue += 10;
-		}
-		
-		self.heartPowerUp.setPosition(randomPosition(700), randomPosition(500));
-		io.emit('UpdateScore', self.scores);																		//io message to update score.
-		io.emit('powerUpLocation', { x: self.heartPowerUp.x, y: self.heartPowerUp.y });								//io message to update power-ups location.
-	});
 }
  
 function update() {
