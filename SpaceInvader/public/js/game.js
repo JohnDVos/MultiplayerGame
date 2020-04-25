@@ -10,7 +10,7 @@ var config = {
       gravity: { y: 0 }
     }
   },
-  scene: [Scene1, Scene2]
+  scene: [mainMenu, settingsMenu, mainGame]
     
 };
  
