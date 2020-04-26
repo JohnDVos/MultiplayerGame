@@ -16,20 +16,20 @@ class mainMenu extends Phaser.Scene{
         //Main Menu
         
         //creates a button and sets a clause if it is pressed or not
-        let playButton = this.add.image(game.config.width/2, game.config.height/3, 'playGame').setDisplaySize(200, 200);
+        let playButton = this.add.image(game.config.width/2, game.config.height/3, 'playGame').setDisplaySize(128, 64);
         playButton.setInteractive();
         playButton.once('pointerdown', function(pointer){
             game.scene.start('mainGame');
         });
         
-        let settingsButton = this.add.image(game.config.width/2, game.config.height/2, 'settings').setDisplaySize(200, 100);
+        let settingsButton = this.add.image(game.config.width/2, game.config.height/2, 'settings').setDisplaySize(128, 64);
         settingsButton.setInteractive();
         settingsButton.once('pointerdown', function(pointer){ 
             game.scene.stop('mainMenu');
             game.scene.start('settingsMenu');
         });
         
-        let helpButton = this.add.image(game.config.width/2, game.config.height/1.5, 'help').setDisplaySize(200, 100);
+        let helpButton = this.add.image(game.config.width/2, game.config.height/1.5, 'help').setDisplaySize(128, 64);
         helpButton.setInteractive();
         helpButton.once('pointerdown', function(pointer){ 
 
