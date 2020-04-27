@@ -9,11 +9,12 @@ class mainGame extends Phaser.Scene{
         this.load.image('space', 'assets/space_background.png');																	//load background image.
 	
 	   //players:
-        this.load.image('ship', 'assets/player/spaceship_1.png');
-        this.load.image('ship2', 'assets//player/spaceship_2.png');
+        this.load.image('ship', 'assets/player/spaceship_1.png');																	//player asset image 1.
+        this.load.image('ship2', 'assets//player/spaceship_2.png');																	//player asset image 2.
+		this.load.image('bullet', 'assets/bullet.png');																				//bullet asset.
 	
 	   //power-ups:
-	   this.load.image('heartPowerUp', 'assets/powerUps/heartPowerUp.png');														//loads health power-up asset.
+	   this.load.image('heartPowerUp', 'assets/powerUps/heartPowerUp.png');															//loads health power-up asset.
 	   this.load.image('damagePowerUp', 'assets/powerUps/damagePowerUp.png');														//loads damange power-up asset.
 	
     }
@@ -43,7 +44,7 @@ class mainGame extends Phaser.Scene{
 			});
 		});
 
-		this.cursors = this.input.keyboard.createCursorKeys();
+		this.cursors = this.input.keyboard.createCursorKeys();																		//movement controls.
 
 		this.socket.on('playerMoved', function (playerInfo) {
 			self.otherPlayers.getChildren().forEach(function (otherPlayer) {
@@ -78,6 +79,7 @@ class mainGame extends Phaser.Scene{
 				this.socket.emit('damagePowerUpCollected');
 			}, null, self);
 		});
+		
 	}
  
     update() {

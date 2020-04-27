@@ -1,19 +1,18 @@
-//Main Menu
-class mainMenu extends Phaser.Scene{
+//Settings Menu
+class helpMenu extends Phaser.Scene{
     constructor(){
-        super("mainMenu"); 
+        super("helpMenu"); 
     }
-    
-    preload(){
+	
+	preload(){
 		//background asset:
 		this.load.image('space', 'assets/space_background.png');
 		
         //menu assets:
-        this.load.image('help', 'assets/menu/help.png');
-        this.load.image('settings', 'assets/menu/settings.png');
-		this.load.image('difficulty', 'assets/menu/difficulty.png');
-        this.load.image('playGame', 'assets/menu/playGame.png');
-		
+        this.load.image('back', 'assets/menu/back.png');
+		this.load.image('controls', 'assets/menu/controls.png');
+		this.load.image('credits', 'assets/menu/credits.png');
+
 		//player assets:
 		this.load.image('player1', 'assets/player/spaceship_1.png');
 		this.load.image('player2', 'assets/player/spaceship_2.png');
@@ -23,41 +22,33 @@ class mainMenu extends Phaser.Scene{
 		this.load.image('enemy_2', 'assets/enemy/enemy_2.png');
 		this.load.image('enemy_3', 'assets/enemy/enemy_3.png');
 		this.load.image('boss', 'assets/enemy/boss.png');
+		
+		//control assets:
+		this.load.image('up', 'assets/help/up_arrow.png');
+		this.load.image('down', 'assets/help/down_arrow.png');
+		this.load.image('left', 'assets/help/left_arrow.png');
+		this.load.image('right', 'assets/help/right_arrow.png');
     }
-    
-    create(){
-        this.add.image(750,375, 'space');
+	
+	create(){
+        this.add.image(750,375, 'space'); 
 		
-        //Main Menu
-        
-        //creates a button and sets a clause if it is pressed or not
-        let playButton = this.add.image(game.config.width/2, game.config.height/3, 'playGame').setDisplaySize(128, 64);
-        playButton.setInteractive();
-        playButton.once('pointerdown', function(pointer){
-            game.scene.start('mainGame');
-        });
-        
-        let difficultyButton = this.add.image(game.config.width/2, game.config.height/2.25, 'difficulty').setDisplaySize(128, 64);
-        difficultyButton.setInteractive();
-        difficultyButton.once('pointerdown', function(pointer){ 
-            game.scene.stop('mainMenu');
-            game.scene.start('difficultyMenu');
+        //Settings Menu:
+        let backButton = this.add.image(100, 50, 'back').setDisplaySize(128, 64);
+        backButton.setInteractive();
+        backButton.once('pointerdown', function(pointer){
+            game.scene.start('mainMenu');
+            game.scene.stop('helpMenu');
         });
 		
-		let settingsButton = this.add.image(game.config.width/2, game.config.height/1.8, 'settings').setDisplaySize(128, 64);
-		settingsButton.setInteractive();
-		settingsButton.once('pointerdown', function(pointer) {
-			game.scene.stop('mainMenu');
-			game.scene.start('settingsMenu');
-		})
-        
-        let helpButton = this.add.image(game.config.width/2, game.config.height/1.5, 'help').setDisplaySize(128, 64);
-        helpButton.setInteractive();
-        helpButton.once('pointerdown', function(pointer){ 
-			game.scene.stop('helpMenu');
-			game.scene.start('helpMenu');
-        });
-		
+		//controls assets:
+		var controls = this.add.image(game.config.width/3, game.config.height/6, 'controls').setDisplaySize(128, 64);
+		var up = this.add.image(game.config.width/3, game.config.height/3.5, 'up').setDisplaySize(64, 64);										//up control.
+		var down = this.add.image(game.config.width/2.75, game.config.height/3.5, 'down').setDisplaySize(64, 64);
+		var left = this.add.image(game.config.width/2.5, game.config.height/3.5, 'left').setDisplaySize(64, 64);
+		var right = this.add.image(game.config.width/2.2, game.config.height/3.5, 'right').setDisplaySize(64, 64);
+		var credits = this.add.image(game.config.width/3, game.config.height/2, 'credits').setDisplaySize(150, 64);
+
 		//spawns player in background.
 		this.player1 = this.add.image(config.width/6, config.height/1, 'player1');
 		this.player2 = this.add.image(config.width/5 + 50, config.height/1, 'player2');
@@ -67,6 +58,7 @@ class mainMenu extends Phaser.Scene{
 		this.enemy_2 = this.add.image(config.width/3, config.height/1, 'enemy_2');
 		this.enemy_3 = this.add.image(config.width/2, config.height/1, 'enemy_3');
         this.boss = this.add.image(config.width/2.2, config.height/1, 'boss');
+
     }
 	
 	update() {																														//update for ships to move at different speeds.
