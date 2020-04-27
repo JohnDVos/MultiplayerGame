@@ -13,8 +13,8 @@ class mainGame extends Phaser.Scene{
         this.load.image('ship2', 'assets//player/spaceship_2.png');
 	
 	   //power-ups:
-	   this.load.image('heartPowerUp', 'assets/power-ups/heartPowerUp.png');														//loads health power-up asset.
-	   this.load.image('damagePowerUp', 'assets/power-ups/damagePowerUp.png');														//loads damange power-up asset.
+	   this.load.image('heartPowerUp', 'assets/powerUps/heartPowerUp.png');														//loads health power-up asset.
+	   this.load.image('damagePowerUp', 'assets/powerUps/damagePowerUp.png');														//loads damange power-up asset.
 	
     }
  
@@ -65,7 +65,7 @@ class mainGame extends Phaser.Scene{
 		
 		this.socket.on('heartPowerUpLocation', function(heartPowerUpLocation) {
 			if(self.heartPowerUp) self.heartPowerUp.destroy();
-			self.heartPowerUp = self.physics.add.image(heartPowerUpLocation.x, heartPowerUpLocation.y, 'heartPowerUpLocation');			//add new heart power-up object to players game.
+			self.heartPowerUp = self.physics.add.image(heartPowerUpLocation.x, heartPowerUpLocation.y, 'heartPowerUp');			//add new heart power-up object to players game.
 			self.physics.add.overlap(self.ship, self.heartPowerUpLocation, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('heartPowerUpCollected');
 			}, null, self);
@@ -73,7 +73,7 @@ class mainGame extends Phaser.Scene{
 		
 		this.socket.on('damagePowerUpLocation', function(damagePowerUpLocation) {
 			if(self.damagePowerUp) self.damagePowerUp.destroy();
-			self.damagePowerUp = self.physics.add.image(damagePowerUpLocation.x, damagePowerUpLocation.y, 'damagePowerUpLocation');		//add new heart power-up object to players game.
+			self.damagePowerUp = self.physics.add.image(damagePowerUpLocation.x, damagePowerUpLocation.y, 'damagePowerUp');		//add new heart power-up object to players game.
 			self.physics.add.overlap(self.ship, self.damagePowerUpLocation, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('damagePowerUpCollected');
 			}, null, self);
