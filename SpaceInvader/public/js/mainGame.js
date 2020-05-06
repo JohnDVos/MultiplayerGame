@@ -60,14 +60,14 @@ class mainGame extends Phaser.Scene{
 		this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });											//blue team score.
 		
 		this.socket.on('scoreUpdate', function(scores) {																				//when score event received.
-			self.redScoreText.setText('Red team score: ' + scores.blue);																//passes score.
+			self.redScoreText.setText('Red team score: ' + scores.red);																//passes score.
 			self.blueScoreText.setText('Blue team score: ' + scores.blue);																//passes score.
 		});
 		
 		this.socket.on('heartPowerUpLocation', function(heartPowerUpLocation) {
 			if(self.heartPowerUp) self.heartPowerUp.destroy();
 			self.heartPowerUp = self.physics.add.image(heartPowerUpLocation.x, heartPowerUpLocation.y, 'heartPowerUp');			//add new heart power-up object to players game.
-			self.physics.add.overlap(self.ship, self.heartPowerUpLocation, function() {													//check if player's ship & power-up overlap.
+			self.physics.add.overlap(self.ship, self.heartPowerUp, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('heartPowerUpCollected');
 			}, null, self);
 		});
@@ -75,7 +75,7 @@ class mainGame extends Phaser.Scene{
 		this.socket.on('damagePowerUpLocation', function(damagePowerUpLocation) {
 			if(self.damagePowerUp) self.damagePowerUp.destroy();
 			self.damagePowerUp = self.physics.add.image(damagePowerUpLocation.x, damagePowerUpLocation.y, 'damagePowerUp');		//add new heart power-up object to players game.
-			self.physics.add.overlap(self.ship, self.damagePowerUpLocation, function() {													//check if player's ship & power-up overlap.
+			self.physics.add.overlap(self.ship, self.damagePowerUp, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('damagePowerUpCollected');
 			}, null, self);
 		});
@@ -119,11 +119,11 @@ class mainGame extends Phaser.Scene{
 
     addPlayer(self, playerInfo) {
 	  self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-	  //if (playerInfo.team === 'blue') {
-	  //  self.ship.setTint(0x0000ff);
-	  //} else {
-	  //  self.ship.setTint(0xff0000);
-	  //}
+	  if (playerInfo.team === 'blue') {
+	    self.ship.setTint(0x0000ff);
+	  } else {
+	    self.ship.setTint(0xff0000);
+	  }
 	  self.ship.setDrag(100);
 	  self.ship.setAngularDrag(100);
 	  self.ship.setMaxVelocity(200);
@@ -131,11 +131,11 @@ class mainGame extends Phaser.Scene{
 
     addOtherPlayers(self, playerInfo) {
 	  const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'ship2').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-	  //if (playerInfo.team === 'blue') {
-	  //  otherPlayer.setTint(0x0000ff);
-	  //} else {
-	  //  otherPlayer.setTint(0xff0000);
-	  //}
+	  if (playerInfo.team === 'blue') {
+	    otherPlayer.setTint(0x0000ff);
+	  } else {
+	    otherPlayer.setTint(0xff0000);
+	  }
 	  otherPlayer.playerId = playerInfo.playerId;
 	  self.otherPlayers.add(otherPlayer);
 	}

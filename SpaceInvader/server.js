@@ -62,9 +62,11 @@ io.on('connection', function (socket) {
     });
 	
 	socket.on('heartPowerUpCollected', function() {																			//when a heart power-up is collected.
-		if(players[socket.id].team === 'red') {																				//if the socket id belongs to the red team.
+		
+        if(players[socket.id].team === 'red') {																				//if the socket id belongs to the red team.
 			scores.red += 10;																								//red teams score + 10 points.
-		} else {																											//if the socket id belongs to the blue team.
+        } 
+        else {																											//if the socket id belongs to the blue team.
 			scores.blue += 10;																								//blue teams score + 10 points.
 		}
 		heartPowerUp.x = Math.floor(Math.random() * 700) + 50;																//x co-ordinate.
@@ -74,7 +76,8 @@ io.on('connection', function (socket) {
 	});
 	
 	socket.on('damagePowerUpCollected', function() {																		//when a damage power-up is collected.
-		if(players[socket.id].team === 'red') {																				//if the socket id belongs to the red team.
+		
+        if(players[socket.id].team === 'red') {																				//if the socket id belongs to the red team.
 			scores.red += 10;																								//red teams score + 10 points.
 		} else {																											//if the socket id belongs to the blue team.
 			scores.blue += 10;																								//blue teams score + 10 points.
