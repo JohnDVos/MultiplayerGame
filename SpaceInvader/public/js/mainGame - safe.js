@@ -1,13 +1,11 @@
 //Main Game
-
 class mainGame extends Phaser.Scene{
     
     
     
     constructor(){
         super("mainGame");
-        
-       
+
     }
     
     preload() {
@@ -21,53 +19,10 @@ class mainGame extends Phaser.Scene{
         //power-ups:
         this.load.image('heartPowerUp', 'assets/powerUps/heartPowerUp.png');														//loads health power-up asset.
         this.load.image('damagePowerUp', 'assets/powerUps/damagePowerUp.png');														//loads damange power-up asset.
-	   
-        
+	
     }
  
     create() {
-        
-        
-        var Bullet = new Phaser.Class({
-
-        Extends: Phaser.GameObjects.Image,
-
-        initialize:
-
-        function Bullet (scene)
-        {
-            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
-
-            this.speed = Phaser.Math.GetSpeed(800, 1);
-        },
-
-        fire: function (x, y)
-        {
-            this.setPosition(x, y - 50);
-
-            this.setActive(true);
-            this.setVisible(true);
-        },
-
-        update: function (time, delta)
-        {
-            this.y -= this.speed * delta;
-
-            if (this.y < -50)
-            {
-                this.setActive(false);
-                this.setVisible(false);
-            }
-        }
-
-    });
-
-    bullets = this.add.group({
-        classType: Bullet,
-        maxSize: 1,
-        runChildUpdate: true
-    });
-        
         
 		var self = this;
 		this.add.image(750,375, 'space');
@@ -133,7 +88,7 @@ class mainGame extends Phaser.Scene{
 		
 	}
  
-    update(time) {
+    update() {
 		if (this.ship) {
             if (this.cursors.left.isDown) {
                 this.ship.setAngularVelocity(-150);
@@ -153,15 +108,7 @@ class mainGame extends Phaser.Scene{
             }
             
             if(this.cursors.space.isDown){
-                var bullet = bullets.get();
 
-                if (bullet)
-                {
-                    bullet.fire(this.ship.x, this.ship.y);
-
-                    lastFired = time + 50;
-                }
-                    
             }
 
             //this.physics.world.wrap(this.ship);

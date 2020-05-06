@@ -13,6 +13,9 @@ var config = {
   scene: [mainMenu, difficultyMenu, settingsMenu, mainGame, helpMenu]
     
 };
- 
+
+var bullets;
+var lastFired = 0;
+
 var game = new Phaser.Game(config);
  
