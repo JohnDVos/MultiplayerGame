@@ -103,7 +103,7 @@ function ServerGameLoop(){
         bullet.x += bullet.speed_x;
         bullet.y += bullet.speed_y;
         
-        if(bullet.x < -10 || bullet.x > 1550 || bullet.y < -10 || bullet.y > 800){
+        if(bullet.x < -50 || bullet.x > 1600 || bullet.y < -50 || bullet.y > 850){
         bullet_array.splice(i,1);
         i--;
         }
