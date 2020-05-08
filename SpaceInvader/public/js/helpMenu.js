@@ -28,6 +28,7 @@ class helpMenu extends Phaser.Scene{
 		this.load.image('down', 'assets/help/down_arrow.png');
 		this.load.image('left', 'assets/help/left_arrow.png');
 		this.load.image('right', 'assets/help/right_arrow.png');
+		this.load.image('spacebar', 'assets/help/spacebar.png');
     }
 	
 	create(){
@@ -41,13 +42,27 @@ class helpMenu extends Phaser.Scene{
             game.scene.stop('helpMenu');
         });
 		
-		//controls assets:
-		var controls = this.add.image(game.config.width/3, game.config.height/6, 'controls').setDisplaySize(128, 64);
-		var up = this.add.image(game.config.width/3, game.config.height/3.5, 'up').setDisplaySize(64, 64);										//up control.
-		var down = this.add.image(game.config.width/2.75, game.config.height/3.5, 'down').setDisplaySize(64, 64);
-		var left = this.add.image(game.config.width/2.5, game.config.height/3.5, 'left').setDisplaySize(64, 64);
-		var right = this.add.image(game.config.width/2.2, game.config.height/3.5, 'right').setDisplaySize(64, 64);
-		var credits = this.add.image(game.config.width/3, game.config.height/2, 'credits').setDisplaySize(150, 64);
+		//controls assets:	//(x, y)
+		var controls = this.add.image(400, 100, 'controls').setDisplaySize(128, 64);
+		
+		var up = this.add.image(400, 200, 'up').setDisplaySize(64, 64);
+			var upText = this.add.text(450, 200, 'press the up key to fly forwards');
+		
+		var left = this.add.image(400, 275, 'left').setDisplaySize(64, 64);
+			var leftText = this.add.text(450, 275, 'press the left key to turn the ship left');
+		
+	
+		var right = this.add.image(400, 325, 'right').setDisplaySize(64, 64);
+			var righText = this.add.text(450, 325, 'press the right key to turn the ship right');
+		
+		var space = this.add.image(400, 380, 'spacebar').setDisplaySize(128, 64);
+			var spaceText = this.add.text(450, 375, ' press spacebar to shoot');
+		
+		
+		//credits
+		var credits = this.add.image(400, 500, 'credits').setDisplaySize(150, 64);
+		var johnText = this.add.text(400, 550, 'John');
+		var nickText = this.add.text(400, 600, 'Nick');
 
 		//spawns player in background.
 		this.player1 = this.add.image(config.width/6, config.height/1, 'player1');
