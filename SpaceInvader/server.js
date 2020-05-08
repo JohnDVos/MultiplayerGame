@@ -116,4 +116,4 @@ server.listen(8081, function () {
   console.log(`Listening on ${server.address().port}`);
 });
 
-setInterval(ServerGameLoop, 16); 
+setInterval(ServerGameLoop, 15); 
