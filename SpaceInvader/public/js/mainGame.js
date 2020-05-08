@@ -28,51 +28,46 @@ class mainGame extends Phaser.Scene{
     create() {
         
         
-        var Bullet = new Phaser.Class({
-
-        Extends: Phaser.GameObjects.Image,
-
-        initialize:
-
-        function Bullet (scene)
-        {
-            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
-
-            this.speed = Phaser.Math.GetSpeed(800, 1);
-        },
-
-        fire: function (x, y)
-        {
-            this.setPosition(x, y - 50);
-
-            this.setActive(true);
-            this.setVisible(true);
-        },
-
-        update: function (time, delta)
-        {
-            this.y -= this.speed * delta;
-
-            if (this.y < -50)
+        /*var Bullet = new Phaser.Class({
+            Extends: Phaser.GameObjects.Image,
+            initialize:
+            
+            function Bullet (scene)
             {
-                this.setActive(false);
-                this.setVisible(false);
+                Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
+                this.speed = Phaser.Math.GetSpeed(800, 1);
+            },
+
+            fire: function (x, y)
+            {
+                this.setPosition(x, y - 50);
+                this.setActive(true);
+                this.setVisible(true);
+            },
+
+            update: function (time, delta)
+            {
+                this.y -= this.speed * delta;
+                
+                if (this.y < -50)
+                {
+                    this.setActive(false);
+                    this.setVisible(false);
+                }
             }
-        }
 
-    });
-
-    bullets = this.add.group({
-        classType: Bullet,
-        maxSize: 1,
-        runChildUpdate: true
-    });
-        
+        });    */    
         
 		var self = this;
 		this.add.image(750,375, 'space');
 		this.socket = io();
 		this.otherPlayers = this.physics.add.group();
+        
+        /*bullets = this.add.group({
+            classType: Bullet,
+            maxSize: 1,
+            runChildUpdate: true
+        });*/
         
         this.socket.on('currentPlayers', function (players) {
 			Object.keys(players).forEach(function (id) {
@@ -130,6 +125,24 @@ class mainGame extends Phaser.Scene{
 				this.socket.emit('damagePowerUpCollected');
 			}, null, self);
 		});
+        
+        this.socket.on('bullets-update', function(server_bullet_array){
+            for(var i = 0; i < server_bullet_array.length; i++){
+                if(bullet_array[i] == undefined){	
+                    bullet_array[i] = self.add.sprite(server_bullet_array[i].x,server_bullet_array[i].y,'bullet');
+                }
+                else{
+                    bullet_array[i].x = server_bullet_array[i].x; 
+                    bullet_array[i].y = server_bullet_array[i].y; 
+                }
+                for(var i=server_bullet_array.length;i<bullet_array.length;i++){
+                    bullet_array[i].destroy();
+                    bullet_array.splice(i,1);
+                    i--;
+                }
+   
+            }
+        });
 		
 	}
  
@@ -153,14 +166,18 @@ class mainGame extends Phaser.Scene{
             }
             
             if(this.cursors.space.isDown){
-                var bullet = bullets.get();
+                //var bullet = bullets.get();
 
-                if (bullet)
-                {
-                    bullet.fire(this.ship.x, this.ship.y);
+                //if (bullet)
+                //{
+                    //bullet.fire(this.ship.x, this.ship.y);
 
-                    lastFired = time + 50;
-                }
+                    //lastFired = time + 50;
+                var speed_x = Math.cos(this.ship.rotation + Math.PI/2) * 20;
+                var speed_y = Math.sin(this.ship.rotation + Math.PI/2) * 20;
+                this.socket.emit('shoot-bullet',{x: this.ship.x, y: this.ship.y ,angle: this.ship.rotation, speed_x: speed_x, speed_y: speed_y})
+                    //this.socket.emit('shoot-bullet',{x:this.ship.x, y:this.ship.y, angle:this.ship.rotation, speed_x: bullet.speed_x, speed_y:bullet.speed_y});
+                //}
                     
             }
 
