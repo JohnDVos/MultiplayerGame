@@ -3,6 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var players = {};
+var bullet_array = [];
 
 app.use(express.static(__dirname + '/public'));
  
@@ -87,8 +88,32 @@ io.on('connection', function (socket) {
 		io.emit('damagePowerUpLocation', damagePowerUp);																	//emits damage power-up was picked up.
 		io.emit('scoreUpdate', scores);																						//updates score.
 	});
-});
+    
+    socket.on('shoot-bullet', function(data){
+        if(players[socket.id] == undefined) return;
+        var new_bullet = data;
+        data.owner_id = socket.id;
+        bullet_array.push(new_bullet);
+    })
+})
+
+function ServerGameLoop(){
+    for(var i = 0; i < bullet_array.length; i++){
+        var bullet = bullet_array[i];
+        bullet.x += bullet.speed_x;
+        bullet.y += bullet.speed_y;
+        
+        if(bullet.x < -10 || bullet.x > 1550 || bullet.y < -10 || bullet.y > 800){
+        bullet_array.splice(i,1);
+        i--;
+        }
+    }
+    
+    io.emit("bullets-update", bullet_array);
+}
 
 server.listen(8081, function () {
   console.log(`Listening on ${server.address().port}`);
 });
+
+setInterval(ServerGameLoop, 16); 
