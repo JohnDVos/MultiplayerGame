@@ -6,8 +6,8 @@ var config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: false,
-      gravity: { y: 0 }
+		debug: false,
+      	gravity: { y: 0 },
     }
   },
   scene: [mainMenu, difficultyMenu, settingsMenu, mainGame, helpMenu]

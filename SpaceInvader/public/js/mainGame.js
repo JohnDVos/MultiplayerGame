@@ -1,13 +1,8 @@
 //Main Game
 
 class mainGame extends Phaser.Scene{
-    
-    
-    
     constructor(){
         super("mainGame");
-        
-       
     }
     
     preload() {
@@ -21,53 +16,22 @@ class mainGame extends Phaser.Scene{
         //power-ups:
         this.load.image('heartPowerUp', 'assets/powerUps/heartPowerUp.png');														//loads health power-up asset.
         this.load.image('damagePowerUp', 'assets/powerUps/damagePowerUp.png');														//loads damange power-up asset.
-	   
+	   	
+		//enemy assets:
+		this.load.image('enemy_1', 'assets/enemy/enemy_1.png');
+		this.load.image('enemy_2', 'assets/enemy/enemy_2.png');
+		this.load.image('enemy_3', 'assets/enemy/enemy_3.png');
+		this.load.image('boss', 'assets/enemy/boss.png');
         
     }
  
     create() {
-        
-        
-        /*var Bullet = new Phaser.Class({
-            Extends: Phaser.GameObjects.Image,
-            initialize:
-            
-            function Bullet (scene)
-            {
-                Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
-                this.speed = Phaser.Math.GetSpeed(800, 1);
-            },
+        //this.physics.world.setBounds(0, 0, 1500, 750);																		//setBounds([x] [, y] [,width] [,height])
 
-            fire: function (x, y)
-            {
-                this.setPosition(x, y - 50);
-                this.setActive(true);
-                this.setVisible(true);
-            },
-
-            update: function (time, delta)
-            {
-                this.y -= this.speed * delta;
-                
-                if (this.y < -50)
-                {
-                    this.setActive(false);
-                    this.setVisible(false);
-                }
-            }
-
-        });    */    
-        
 		var self = this;
 		this.add.image(750,375, 'space');
 		this.socket = io();
 		this.otherPlayers = this.physics.add.group();
-        
-        /*bullets = this.add.group({
-            classType: Bullet,
-            maxSize: 1,
-            runChildUpdate: true
-        });*/
         
         this.socket.on('currentPlayers', function (players) {
 			Object.keys(players).forEach(function (id) {
@@ -102,7 +66,7 @@ class mainGame extends Phaser.Scene{
 		
 		//adds text game object to display team scores:
 		this.redScoreText = this.add.text(1000, 16, '', { fontSize: '32px', fill: '#FF0000' });											//red team score.
-		this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });											//blue team score.
+		this.blueScoreText = this.add.text(100, 16, '', { fontSize: '32px', fill: '#0000FF' });											//blue team score.
 		
 		this.socket.on('scoreUpdate', function(scores) {																				//when score event received.
 			self.redScoreText.setText('Red team score: ' + scores.red);																//passes score.
@@ -144,6 +108,15 @@ class mainGame extends Phaser.Scene{
             }
         });
 		
+		//spawns enemies in background.
+		this.enemy_1 = this.add.image(config.width/4, config.height/1, 'enemy_1');
+		this.enemy_2 = this.add.image(config.width/3, config.height/1, 'enemy_2');
+		this.enemy_3 = this.add.image(config.width/2, config.height/1, 'enemy_3');
+        this.boss = this.add.image(config.width/2.2, config.height/1, 'boss');
+		
+		this.enemy_1.setInteractive();
+		this.input.on('gamgeobjectdown', this.destroyShip, this);
+		
 	}
  
     update(time) {
@@ -166,18 +139,10 @@ class mainGame extends Phaser.Scene{
             }
             
             if(this.cursors.space.isDown){
-                //var bullet = bullets.get();
 
-                //if (bullet)
-                //{
-                    //bullet.fire(this.ship.x, this.ship.y);
-
-                    //lastFired = time + 50;
                 var speed_x = Math.cos(this.ship.rotation + Math.PI/2) * 20;
                 var speed_y = Math.sin(this.ship.rotation + Math.PI/2) * 20;
                 this.socket.emit('shoot-bullet',{x: this.ship.x, y: this.ship.y ,angle: this.ship.rotation, speed_x: speed_x, speed_y: speed_y})
-                    //this.socket.emit('shoot-bullet',{x:this.ship.x, y:this.ship.y, angle:this.ship.rotation, speed_x: bullet.speed_x, speed_y:bullet.speed_y});
-                //}
                     
             }
 
@@ -198,6 +163,11 @@ class mainGame extends Phaser.Scene{
                 rotation: this.ship.rotation
             };
         }
+		
+		this.moveShip(this.enemy_1, 1.8);
+		this.moveShip(this.enemy_2, 1);
+		this.moveShip(this.enemy_3, 1.5);
+		this.moveShip(this.boss, 0.5);
     }
 
     addPlayer(self, playerInfo) {
@@ -221,5 +191,21 @@ class mainGame extends Phaser.Scene{
 	  }
 	  otherPlayer.playerId = playerInfo.playerId;
 	  self.otherPlayers.add(otherPlayer);
+	}
+	
+	moveShip(ship, speed) {
+		ship.y += speed;																											//takes param for ship object & y velocity.
+		if(ship.y > config.height) {																								//if vertical position exceeds height of game.
+			this.resetShipPos(ship);																								//calls reset ship position.	
+		}
+	}
+	destroyShip(pointer, gameObject) {
+		gameObject.setTexture();
+	}
+	
+	resetShipPos(ship) {
+		ship.y = 0;																													//takes ship object & sets Y to 0.
+		var randomX = Phaser.Math.Between(0, config.width);																			//creates random value between 0 & width of canvas.
+		ship.x = randomX;																											//assigns to x position.
 	}
 }
