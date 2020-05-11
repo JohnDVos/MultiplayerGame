@@ -112,12 +112,12 @@ class mainGame extends Phaser.Scene{
         this.socket.on('player-hit', function(data){
             console.log(data.id);
             console.log(data.playerID);
-            if(id == this.ship.id){
+            if(data.id == data.playerID){
                 //If this is you
-                this.ship.alpha = 0;
+                self.ship.alpha = 0;
             } else {
                 // Find the right player 
-                this.otherPlayers.getChildren().forEach(function (otherPlayer) {
+                self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                     otherPlayer.alpha = 0;
                 })
             }
@@ -206,6 +206,8 @@ class mainGame extends Phaser.Scene{
 	    self.ship.setMaxVelocity(200);
         self.ship.setCollideWorldBounds(true);
         self.ship.onWorldBounds = true;
+        
+        player_id = playerInfo.playerId;
         
         if (playerInfo.team === 'blue') {
             self.ship.setTint(0x0000ff);
