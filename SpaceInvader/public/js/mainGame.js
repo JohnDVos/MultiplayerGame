@@ -32,7 +32,7 @@ class mainGame extends Phaser.Scene{
 		this.add.image(750,375, 'space');
 		this.socket = io();
 		this.otherPlayers = this.physics.add.group();
-        
+            
         this.socket.on('currentPlayers', function (players) {
 			Object.keys(players).forEach(function (id) {
 				if (players[id].playerId === self.socket.id) {
@@ -107,7 +107,22 @@ class mainGame extends Phaser.Scene{
    
             }
         });
-		
+        
+        // Listen for any player hit events and make that player flash 
+        this.socket.on('player-hit', function(data){
+            console.log(data.id);
+            console.log(data.playerID);
+            if(id == this.ship.id){
+                //If this is you
+                this.ship.alpha = 0;
+            } else {
+                // Find the right player 
+                this.otherPlayers.getChildren().forEach(function (otherPlayer) {
+                    otherPlayer.alpha = 0;
+                })
+            }
+        })
+
 		//spawns enemies in background.
 		this.enemy_1 = this.add.image(config.width/4, config.height/1, 'enemy_1');
 		this.enemy_2 = this.add.image(config.width/3, config.height/1, 'enemy_2');
@@ -139,14 +154,11 @@ class mainGame extends Phaser.Scene{
             }
             
             if(this.cursors.space.isDown){
-
                 var speed_x = Math.cos(this.ship.rotation + Math.PI/2) * 20;
                 var speed_y = Math.sin(this.ship.rotation + Math.PI/2) * 20;
                 this.socket.emit('shoot-bullet',{x: this.ship.x, y: this.ship.y ,angle: this.ship.rotation, speed_x: speed_x, speed_y: speed_y})
                     
             }
-
-            //this.physics.world.wrap(this.ship);
 
             // emit player movement
             var x = this.ship.x;
@@ -162,6 +174,23 @@ class mainGame extends Phaser.Scene{
                 y: this.ship.y,
                 rotation: this.ship.rotation
             };
+               
+            // To make player flash when they are hit, set player.spite.alpha = 0
+            if(this.ship.alpha < 1){
+                this.ship.alpha += (1 - this.ship.alpha) * 0.16;
+            } else {
+                this.ship.alpha = 1;
+            }
+            
+            // Each player is responsible for bringing their alpha back up on their own client 
+            // Make sure other players flash back to alpha = 1 when they're hit 
+            this.otherPlayers.getChildren().forEach(function (otherPlayer) {
+				if (otherPlayer.alpha < 1) {
+					otherPlayer.alpha += (1 - otherPlayer.alpha) * 0.16;
+				} else {
+                    otherPlayer.alpha = 1;
+                }
+			});
         }
 		
 		this.moveShip(this.enemy_1, 1.8);

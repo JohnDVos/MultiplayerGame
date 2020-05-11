@@ -103,6 +103,20 @@ function ServerGameLoop(){
         bullet.x += bullet.speed_x;
         bullet.y += bullet.speed_y;
         
+        // Check if this bullet is close enough to hit any player 
+        for(var id in players){
+            if(bullet.owner_id != id){
+            // And your own bullet shouldn't kill you
+            var dx = players[id].x - bullet.x; 
+            var dy = players[id].y - bullet.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if(dist < 10){
+                io.emit('player-hit',{ id: id, playerID: players[socket.id]}); // Tell everyone this player got hit
+                
+                }
+            }
+        }
+        
         if(bullet.x < -50 || bullet.x > 1600 || bullet.y < -50 || bullet.y > 850){
         bullet_array.splice(i,1);
         i--;
