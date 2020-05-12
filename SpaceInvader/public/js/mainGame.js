@@ -45,7 +45,8 @@ class mainGame extends Phaser.Scene{
 		this.socket.on('newPlayer', function (playerInfo) {
 			self.addOtherPlayers(self, playerInfo);
 		});
-		this.socket.on('disconnect', function (playerId) {
+        
+        this.socket.on('disconnect', function (playerId) {
 			self.otherPlayers.getChildren().forEach(function (otherPlayer) {
 			if (playerId === otherPlayer.playerId) {
 				otherPlayer.destroy();
@@ -90,13 +91,13 @@ class mainGame extends Phaser.Scene{
 			}, null, self);
 		});
 		
-		/*this.socket.on('bossLocation', function(bossLocation) {
+		this.socket.on('bossLocation', function(bossLocation) {
 			if(self.boss) self.boss.destroy();
 			self.boss = self.physics.add.image(bossLocation.x, bossLocation.y, 'boss');		//add new heart power-up object to players game.
 			self.physics.add.overlap(self.ship, self.boss, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('bossHit');
 			}, null, self);
-		});*/
+		});
         
         this.socket.on('bullets-update', function(server_bullet_array){
             for(var i = 0; i < server_bullet_array.length; i++){
@@ -210,7 +211,7 @@ class mainGame extends Phaser.Scene{
 	    }
  
     }
-    
+        
     addOtherPlayers(self, playerInfo) {
         const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'ship2').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
 	    if (playerInfo.team === 'blue') {

@@ -39,7 +39,6 @@ io.on('connection', function (socket) {
 	};
 	
 	
-	
 	var boss = {
 		x : Math.floor(Math.random() * 700) + 50,
 		y : Math.floor(Math.random() * 500) + 50 
