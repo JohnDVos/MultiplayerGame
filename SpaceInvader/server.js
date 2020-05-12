@@ -38,12 +38,19 @@ io.on('connection', function (socket) {
 		red : 0
 	};
 	
+	var boss = {
+		x : Math.floor(Math.random() * 700) + 50,
+		y : Math.floor(Math.random() * 500) + 50 
+	}
+	
     socket.emit('currentPlayers', players);																				// send the players object to the new player.
     socket.broadcast.emit('newPlayer', players[socket.id]);  															// update all other players of the new player.
 	
 	socket.emit('heartPowerUpLocation', heartPowerUp);																	//send heart power-up object to the new player.
 	socket.emit('damagePowerUpLocation', damagePowerUp);																//send damage power-up object to the new player.
 	socket.emit('scoreUpdate', scores);																					//send the current scores.
+	
+	socket.emit('bossLocation', boss);
     
     socket.on('disconnect', function () {
         console.log('user disconnected');
@@ -87,6 +94,18 @@ io.on('connection', function (socket) {
 		io.emit('damagePowerUpLocation', damagePowerUp);																	//emits damage power-up was picked up.
 		io.emit('scoreUpdate', scores);																						//updates score.
 	});
+	
+	socket.on('bossHit', function() {
+		if(players[socket.id].team == 'red') {
+			scores.red += 100;
+		} else {
+			scores.blue += 100;
+		}
+		boss.x = Math.floor(Math.random() * 700) + 50;
+		boss.y = Math.floor(Math.random() * 500) + 50;
+		io.emit('bossLocation', boss);
+		io.emit('scoreUpdate', scores);
+	})
     
     socket.on('shoot-bullet', function(data){
         if(players[socket.id] == undefined) return;

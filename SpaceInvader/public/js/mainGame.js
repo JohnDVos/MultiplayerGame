@@ -89,6 +89,14 @@ class mainGame extends Phaser.Scene{
 				this.socket.emit('damagePowerUpCollected');
 			}, null, self);
 		});
+		
+		this.socket.on('bossLocation', function(bossLocation) {
+			if(self.boss) self.boss.destroy();
+			self.boss = self.physics.add.image(bossLocation.x, bossLocation.y, 'boss');		//add new heart power-up object to players game.
+			self.physics.add.overlap(self.bullet, self.boss, function() {													//check if player's ship & power-up overlap.
+				this.socket.emit('bossHit');
+			}, null, self);
+		});
         
         this.socket.on('bullets-update', function(server_bullet_array){
             for(var i = 0; i < server_bullet_array.length; i++){
@@ -122,15 +130,6 @@ class mainGame extends Phaser.Scene{
                 })
             }
         })
-
-		//spawns enemies in background.
-		this.enemy_1 = this.add.image(config.width/4, config.height/1, 'enemy_1');
-		this.enemy_2 = this.add.image(config.width/3, config.height/1, 'enemy_2');
-		this.enemy_3 = this.add.image(config.width/2, config.height/1, 'enemy_3');
-        this.boss = this.add.image(config.width/2.2, config.height/1, 'boss');
-		
-		this.enemy_1.setInteractive();
-		this.input.on('gamgeobjectdown', this.destroyShip, this);
 		
 	}
  
@@ -193,10 +192,6 @@ class mainGame extends Phaser.Scene{
 			});
         }
 		
-		this.moveShip(this.enemy_1, 1.8);
-		this.moveShip(this.enemy_2, 1);
-		this.moveShip(this.enemy_3, 1.5);
-		this.moveShip(this.boss, 0.5);
     }
     
     addPlayer(self, playerInfo) {
@@ -227,20 +222,4 @@ class mainGame extends Phaser.Scene{
         otherPlayer.playerId = playerInfo.playerId;
         self.otherPlayers.add(otherPlayer);
     }
-	
-	moveShip(ship, speed) {
-		ship.y += speed;																											//takes param for ship object & y velocity.
-		if(ship.y > config.height) {																								//if vertical position exceeds height of game.
-			this.resetShipPos(ship);																								//calls reset ship position.	
-		}
-	}
-	destroyShip(pointer, gameObject) {
-		gameObject.setTexture();
-	}
-	
-	resetShipPos(ship) {
-		ship.y = 0;																													//takes ship object & sets Y to 0.
-		var randomX = Phaser.Math.Between(0, config.width);																			//creates random value between 0 & width of canvas.
-		ship.x = randomX;																											//assigns to x position.
-	}
 }
