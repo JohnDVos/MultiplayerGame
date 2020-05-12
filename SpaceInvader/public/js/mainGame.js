@@ -93,7 +93,7 @@ class mainGame extends Phaser.Scene{
 		this.socket.on('bossLocation', function(bossLocation) {
 			if(self.boss) self.boss.destroy();
 			self.boss = self.physics.add.image(bossLocation.x, bossLocation.y, 'boss');		//add new heart power-up object to players game.
-			self.physics.add.overlap(self.bullet, self.boss, function() {													//check if player's ship & power-up overlap.
+			self.physics.add.overlap(self.ship, self.boss, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('bossHit');
 			}, null, self);
 		});
@@ -202,7 +202,6 @@ class mainGame extends Phaser.Scene{
         self.ship.setCollideWorldBounds(true);
         self.ship.onWorldBounds = true;
         
-        player_id = playerInfo.playerId;
         
         if (playerInfo.team === 'blue') {
             self.ship.setTint(0x0000ff);

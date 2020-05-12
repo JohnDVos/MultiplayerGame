@@ -17,6 +17,5 @@ var config = {
 var bullets;
 var lastFired = 0;
 var bullet_array= [];
-var player_id;
 var game = new Phaser.Game(config);
  

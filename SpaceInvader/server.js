@@ -129,8 +129,7 @@ function ServerGameLoop(){
             var dy = players[id].y - bullet.y;
             var dist = Math.sqrt(dx * dx + dy * dy);
             if(dist < 70){
-                io.emit('player-hit',{ id: id, playerID: player_id}); // Tell everyone this player got hit
-                
+                io.emit('player-hit',{ id: id, playerID: bullet.owner_id}); // Tell everyone this player got hit
                 }
             }
         }
