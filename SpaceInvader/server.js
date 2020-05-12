@@ -10,6 +10,22 @@ var scores = {
 		red : 0
 	};
 
+var heartPowerUp = {
+		x : Math.floor(Math.random() * 700) + 50,
+		y : Math.floor(Math.random() * 500) + 50
+	};
+	
+	var damagePowerUp = {
+		x : Math.floor(Math.random() * 700) + 50,
+		y : Math.floor(Math.random() * 500) + 50
+	};
+	
+	
+	var boss = {
+		x : Math.floor(Math.random() * 700) + 50,
+		y : Math.floor(Math.random() * 500) + 50 
+	}
+
 app.use(express.static(__dirname + '/public'));
  
 app.get('/', function (req, res) {
@@ -28,21 +44,7 @@ io.on('connection', function (socket) {
         team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
     };
 	
-	var heartPowerUp = {
-		x : Math.floor(Math.random() * 700) + 50,
-		y : Math.floor(Math.random() * 500) + 50
-	};
 	
-	var damagePowerUp = {
-		x : Math.floor(Math.random() * 700) + 50,
-		y : Math.floor(Math.random() * 500) + 50
-	};
-	
-	
-	var boss = {
-		x : Math.floor(Math.random() * 700) + 50,
-		y : Math.floor(Math.random() * 500) + 50 
-	}
 	
     socket.emit('currentPlayers', players);																				// send the players object to the new player.
     socket.broadcast.emit('newPlayer', players[socket.id]);  															// update all other players of the new player.
@@ -104,7 +106,7 @@ io.on('connection', function (socket) {
 		}
 		boss.x = Math.floor(Math.random() * 700) + 50;
 		boss.y = Math.floor(Math.random() * 500) + 50;
-		io.emit('bossLocation', boss);
+		//io.emit('bossLocation', boss);
 		io.emit('scoreUpdate', scores);
 	})
     
@@ -124,28 +126,40 @@ function ServerGameLoop(){
         
         // Check if this bullet is close enough to hit any player 
         for(var id in players){
+            var flag = true;
             if(bullet.owner_id != id){
-            // And your own bullet shouldn't kill you
+                // And your own bullet shouldn't kill you
             
-            var dx = players[id].x - bullet.x; 
-            var dy = players[id].y - bullet.y;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-            if(dist < 20){
-                io.emit('player-hit',{ id: id, playerID: bullet.owner_id}); // Tell everyone this player got hit
+                var dx = players[id].x - bullet.x; 
+                var dy = players[id].y - bullet.y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if(dist < 20){
+                    io.emit('player-hit',{ id: id, playerID: bullet.owner_id}); // Tell everyone this player got hit
                 
-                if(players[bullet.owner_id].team == 'red'){
-                    scores.red += 5;
-                } else {
-                    scores.blue += 5;
-		          }
+                    if(players[bullet.owner_id].team == 'red'){
+                        scores.red += 5;
+                    } else {
+                        scores.blue += 5;
+                    }
                 }
             }
           io.emit('scoreUpdate', scores);
         }
         
+        var dx = boss.x - bullet.x;
+        var dy = boss.y - bullet.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if(dist < 70){
+            console.log("ENEMY HIT");
+            flag = false;
+            io.emit('bossLocation', boss);
+        }
+        
         if(bullet.x < -50 || bullet.x > 1600 || bullet.y < -50 || bullet.y > 850){
             bullet_array.splice(i,1);
             i--;
+            flag = true;
         }
     }
     

@@ -92,11 +92,13 @@ class mainGame extends Phaser.Scene{
 		});
 		
 		this.socket.on('bossLocation', function(bossLocation) {
-			if(self.boss) self.boss.destroy();
+			if(self.boss) {
+                self.boss.destroy();
+                this.socket.emit('bossHit');
+            }
 			self.boss = self.physics.add.image(bossLocation.x, bossLocation.y, 'boss');		//add new heart power-up object to players game.
-			self.physics.add.overlap(self.ship, self.boss, function() {													//check if player's ship & power-up overlap.
-				this.socket.emit('bossHit');
-			}, null, self);
+            console.log("bossLocation HIT");
+            
 		});
         
         this.socket.on('bullets-update', function(server_bullet_array){
