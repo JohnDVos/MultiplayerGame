@@ -90,13 +90,13 @@ class mainGame extends Phaser.Scene{
 			}, null, self);
 		});
 		
-		this.socket.on('bossLocation', function(bossLocation) {
+		/*this.socket.on('bossLocation', function(bossLocation) {
 			if(self.boss) self.boss.destroy();
 			self.boss = self.physics.add.image(bossLocation.x, bossLocation.y, 'boss');		//add new heart power-up object to players game.
 			self.physics.add.overlap(self.ship, self.boss, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('bossHit');
 			}, null, self);
-		});
+		});*/
         
         this.socket.on('bullets-update', function(server_bullet_array){
             for(var i = 0; i < server_bullet_array.length; i++){

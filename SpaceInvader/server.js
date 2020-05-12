@@ -3,7 +3,12 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var players = {};
+var enemies = {};
 var bullet_array = [];
+var scores = {
+		blue : 0,
+		red : 0
+	};
 
 app.use(express.static(__dirname + '/public'));
  
@@ -33,10 +38,7 @@ io.on('connection', function (socket) {
 		y : Math.floor(Math.random() * 500) + 50
 	};
 	
-	var scores = {
-		blue : 0,
-		red : 0
-	};
+	
 	
 	var boss = {
 		x : Math.floor(Math.random() * 700) + 50,
@@ -125,18 +127,26 @@ function ServerGameLoop(){
         for(var id in players){
             if(bullet.owner_id != id){
             // And your own bullet shouldn't kill you
+            
             var dx = players[id].x - bullet.x; 
             var dy = players[id].y - bullet.y;
             var dist = Math.sqrt(dx * dx + dy * dy);
-            if(dist < 70){
+            if(dist < 20){
                 io.emit('player-hit',{ id: id, playerID: bullet.owner_id}); // Tell everyone this player got hit
+                
+                if(players[bullet.owner_id].team == 'red'){
+                    scores.red += 5;
+                } else {
+                    scores.blue += 5;
+		          }
                 }
             }
+          io.emit('scoreUpdate', scores);
         }
         
         if(bullet.x < -50 || bullet.x > 1600 || bullet.y < -50 || bullet.y > 850){
-        bullet_array.splice(i,1);
-        i--;
+            bullet_array.splice(i,1);
+            i--;
         }
     }
     
