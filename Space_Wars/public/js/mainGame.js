@@ -24,13 +24,17 @@ class mainGame extends Phaser.Scene{
 		this.load.image('boss', 'assets/enemy/boss.png');
         
         //sound:
-        this.load.audio('music', 'assets/sound/background music.wav')
-        this.load.audio('bulletSFX', 'assets/sound/bullet.wav')
+        this.load.audio('music', 'assets/sound/background music.wav');
+        this.load.audio('bulletSFX', 'assets/sound/bullet.wav');
+        this.load.audio('powerupSFX', 'assets/sound/powerup.wav');
     }
  
     create() {
         this.physics.world.setBounds(0, 0, 1500, 750, true, true, true, true);															
-        this.sound.play('music');
+        var music = this.sound.add('music');
+        music.loop = true;
+        music.play();
+        
         
 		var self = this;
 		this.add.image(750,375, 'space');
@@ -86,6 +90,7 @@ class mainGame extends Phaser.Scene{
 			self.heartPowerUp = self.physics.add.image(heartPowerUpLocation.x, heartPowerUpLocation.y, 'heartPowerUp');			//add new heart power-up object to players game.
 			self.physics.add.overlap(self.ship, self.heartPowerUp, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('heartPowerUpCollected');
+                this.sound.play('powerupSFX');
 			}, null, self);
 		});
 		
@@ -94,6 +99,7 @@ class mainGame extends Phaser.Scene{
 			self.damagePowerUp = self.physics.add.image(damagePowerUpLocation.x, damagePowerUpLocation.y, 'damagePowerUp');		//add new heart power-up object to players game.
 			self.physics.add.overlap(self.ship, self.damagePowerUp, function() {													//check if player's ship & power-up overlap.
 				this.socket.emit('damagePowerUpCollected');
+                this.sound.play('powerupSFX');
 			}, null, self);
 		});
 		
