@@ -2,29 +2,30 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
+
+var playerCount = 0;
+
 var players = {};
 var enemies = {};
 var bullet_array = [];
 var scores = {
-		blue : 0,
-		red : 0
-	};
+    blue : 0,
+    red : 0
+};
 
 var heartPowerUp = {
-		x : Math.floor(Math.random() * 700) + 50,
-		y : Math.floor(Math.random() * 500) + 50
-	};
+    x : Math.floor(Math.random() * 700) + 50,
+    y : Math.floor(Math.random() * 500) + 50
+};
 	
-	var damagePowerUp = {
-		x : Math.floor(Math.random() * 700) + 50,
-		y : Math.floor(Math.random() * 500) + 50
-	};
-	
-	
-	var boss = {
-		x : Math.floor(Math.random() * 700) + 50,
-		y : Math.floor(Math.random() * 500) + 50 
-	}
+var damagePowerUp = {
+    x : Math.floor(Math.random() * 700) + 50,
+    y : Math.floor(Math.random() * 500) + 50
+};
+var boss = {
+    x : Math.floor(Math.random() * 700) + 50,
+    y : Math.floor(Math.random() * 500) + 50 
+}
 
 app.use(express.static(__dirname + '/public'));
  
@@ -41,11 +42,12 @@ io.on('connection', function (socket) {
         x: Math.floor(Math.random() * 700) + 50,
         y: Math.floor(Math.random() * 500) + 50,
         playerId: socket.id,
-        team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
+        team: 'red'
     };
-	
-	
-	
+    playerCount += 1;
+    
+    if (playerCount % 2 ==  0) players[socket.id].team = 'blue';
+    console.log(playerCount);
     socket.emit('currentPlayers', players);																				// send the players object to the new player.
     socket.broadcast.emit('newPlayer', players[socket.id]);  															// update all other players of the new player.
 	
@@ -57,6 +59,7 @@ io.on('connection', function (socket) {
     
     socket.on('disconnect', function () {
         console.log('user disconnected');
+        playerCount -= 1;
         // remove this player from our players object
         delete players[socket.id];
         // emit a message to all players to remove this player
@@ -71,6 +74,10 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
 	
+    socket.on('bossMovement', function(){
+        boss.body.setVelocityY(50);
+    })
+    
 	socket.on('heartPowerUpCollected', function() {																			//when a heart power-up is collected.
 		
         if(players[socket.id].team === 'red') {																				//if the socket id belongs to the red team.
@@ -105,8 +112,9 @@ io.on('connection', function (socket) {
 			scores.blue += 100;
 		}
 		boss.x = Math.floor(Math.random() * 700) + 50;
-		boss.y = Math.floor(Math.random() * 500) + 50;
-		//io.emit('bossLocation', boss);
+		boss.y = 0;
+        
+		io.emit('bossLocation', boss);
 		io.emit('scoreUpdate', scores);
 	})
     
@@ -116,9 +124,19 @@ io.on('connection', function (socket) {
         data.owner_id = socket.id;
         bullet_array.push(new_bullet);
     })
+    
+    
 })
 
+function spawnPowerUps(){
+    io.emit('heartPowerUpLocation', heartPowerUp);
+    io.emit('damagePowerUpLocation', heartPowerUp);
+}
+
 function ServerGameLoop(){
+    
+    //game.time.events.repeat(Phaser.Timer.SECOND * 2, 10, spawnPowerUps, this);
+    
     for(var i = 0; i < bullet_array.length; i++){
         var bullet = bullet_array[i];
         bullet.x += bullet.speed_x;
@@ -150,10 +168,12 @@ function ServerGameLoop(){
         var dy = boss.y - bullet.y;
         var dist = Math.sqrt(dx * dx + dy * dy);
         
-        if(dist < 70){
+        if(dist < 50){
             console.log("ENEMY HIT");
             flag = false;
+            io.emit('enemyHit');
             io.emit('bossLocation', boss);
+            
         }
         
         if(bullet.x < -50 || bullet.x > 1600 || bullet.y < -50 || bullet.y > 850){
@@ -162,7 +182,6 @@ function ServerGameLoop(){
             flag = true;
         }
     }
-    
     io.emit("bullets-update", bullet_array);
 }
 

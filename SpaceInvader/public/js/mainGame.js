@@ -33,6 +33,8 @@ class mainGame extends Phaser.Scene{
 		this.socket = io();
 		this.otherPlayers = this.physics.add.group();
             
+        //this.addEnemy();
+        
         this.socket.on('currentPlayers', function (players) {
 			Object.keys(players).forEach(function (id) {
 				if (players[id].playerId === self.socket.id) {
@@ -94,12 +96,18 @@ class mainGame extends Phaser.Scene{
 		this.socket.on('bossLocation', function(bossLocation) {
 			if(self.boss) {
                 self.boss.destroy();
-                this.socket.emit('bossHit');
+                //this.socket.emit('bossHit');
             }
+            
 			self.boss = self.physics.add.image(bossLocation.x, bossLocation.y, 'boss');		//add new heart power-up object to players game.
-            console.log("bossLocation HIT");
+            
+            //console.log("bossLocation HIT");
             
 		});
+        
+        this.socket.on('enemyHit', function(){
+            self.boss.destroy();
+        })
         
         this.socket.on('bullets-update', function(server_bullet_array){
             for(var i = 0; i < server_bullet_array.length; i++){
@@ -137,6 +145,9 @@ class mainGame extends Phaser.Scene{
 	}
  
     update(time) {
+        
+       //this.moveEnemies();
+        
 		if (this.ship) {
             if (this.cursors.left.isDown) {
                 this.ship.setAngularVelocity(-150);
@@ -213,7 +224,7 @@ class mainGame extends Phaser.Scene{
 	    }
  
     }
-        
+    
     addOtherPlayers(self, playerInfo) {
         const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'ship2').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
 	    if (playerInfo.team === 'blue') {
@@ -224,4 +235,38 @@ class mainGame extends Phaser.Scene{
         otherPlayer.playerId = playerInfo.playerId;
         self.otherPlayers.add(otherPlayer);
     }
+/*        
+    addEnemy(){
+        this.spawns = this.physics.add.group({
+            classType: Phaser.GameObjects.Sprite
+        });
+        
+        for(var i = 0; i < 3; i++){
+        
+            var enemy = this.spawns.create(Math.floor(Math.random() * 1300) + 50, 0, this.getEnemySprite());
+            //enemy.body.setCollideWorldBounds(true);
+            //enemy.body.setImmovable();
+            
+        }
+    }
+    
+    moveEnemies(){
+        this.spawns.getChildren().forEach((enemy) => {
+            enemy.body.setVelocityY(50);
+            if(enemy.body.y > config.height) {
+                enemy.body.destroy;
+                this.addEnemy();
+            }
+        });
+        
+  
+    }
+    
+    getEnemySprite() {
+        var sprites = ['enemy_1', 'enemy_2', 'enemy_3', 'boss'];
+        return sprites[Math.floor(Math.random() * sprites.length)];
+    }
+    
+    
+*/    
 }
