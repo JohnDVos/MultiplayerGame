@@ -1,6 +1,0 @@
-1) open command prompt and make your way to the folder you have put the repo in.
-2) make sure you're in the client folder and type in "npm install" 
-3) in command prompt type "node server.js"
-   a) command prompt should say listening on 55000
-4) run XAMMPP and click on services, go to your folder for the game and select client; it'll open up the game with the dark screen and the coin,
-   a) click anywhere on the screen and the coin will move and command prompt will give you numbers as to where is moved.

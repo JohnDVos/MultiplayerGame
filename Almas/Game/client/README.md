@@ -1,1 +1,0 @@
-Adapted from https://github.com/Jerenaux/basic-mmo-phaser
