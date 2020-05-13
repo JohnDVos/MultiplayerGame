@@ -1,5 +1,5 @@
 # MultiplayerGame
-A Space invaders styled multiplayer JavScript game.
+A Space invaders styled multiplayer JavaScript game.
 
 ## Getting Started
 To run the game simply download the repo, navigate into the Space Wars folder in command prompt and input "node server.js" then in your chosen browset go to "localhost:8081".
@@ -23,5 +23,5 @@ localhost:8081
 
 ## Authors
 
-* ** John Vos
-* ** Nick Kissaun
+* John Vos
+* Nick Kissaun
