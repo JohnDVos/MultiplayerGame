@@ -23,11 +23,15 @@ class mainGame extends Phaser.Scene{
 		this.load.image('enemy_3', 'assets/enemy/enemy_3.png');
 		this.load.image('boss', 'assets/enemy/boss.png');
         
+        //sound:
+        this.load.audio('music', 'assets/sound/background music.wav')
+        this.load.audio('bulletSFX', 'assets/sound/bullet.wav')
     }
  
     create() {
         this.physics.world.setBounds(0, 0, 1500, 750, true, true, true, true);															
-
+        this.sound.play('music');
+        
 		var self = this;
 		this.add.image(750,375, 'space');
 		this.socket = io();
@@ -170,7 +174,7 @@ class mainGame extends Phaser.Scene{
                 var speed_x = Math.cos(this.ship.rotation + Math.PI/2) * 20;
                 var speed_y = Math.sin(this.ship.rotation + Math.PI/2) * 20;
                 this.socket.emit('shoot-bullet',{x: this.ship.x, y: this.ship.y ,angle: this.ship.rotation, speed_x: speed_x, speed_y: speed_y})
-                    
+                this.sound.play('bulletSFX');    
             }
 
             // emit player movement
