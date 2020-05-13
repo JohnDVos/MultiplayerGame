@@ -23,11 +23,11 @@ class mainMenu extends Phaser.Scene{
 		this.load.image('enemy_2', 'assets/enemy/enemy_2.png');
 		this.load.image('enemy_3', 'assets/enemy/enemy_3.png');
 		this.load.image('boss', 'assets/enemy/boss.png');
+        
     }
     
     create(){
         this.add.image(750,375, 'space');
-		
         //Main Menu
         
         //creates a button and sets a clause if it is pressed or not
