@@ -23,11 +23,14 @@ class mainGame extends Phaser.Scene{
 		this.load.image('enemy_3', 'assets/enemy/enemy_3.png');
 		this.load.image('boss', 'assets/enemy/boss.png');
         
+        //sound:
+        this.load.audio('music', 'assets/background music.wav')
     }
  
     create() {
         this.physics.world.setBounds(0, 0, 1500, 750, true, true, true, true);															
-
+        this.sound.play('music');
+        
 		var self = this;
 		this.add.image(750,375, 'space');
 		this.socket = io();
